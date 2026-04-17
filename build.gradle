@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.3.0'
+        classpath 'org.jetbrains.kotlin:kotlin-serialization:2.3.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task run(type: JavaExec) {
+    group = 'application'
+    description = 'Run the application'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'Main'
+}
